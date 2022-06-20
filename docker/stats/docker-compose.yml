@@ -1,0 +1,65 @@
+version: "3.7"
+
+# m-jowett/detect-cyber-threats-network-edge
+# 04/05/2022
+
+
+# Docker-Compose file for statistics database and dashboard
+
+
+# Also for generating bridge networks nodes communicate over
+# See statistics section of report
+
+# https://docs.docker.com/compose/compose-file/compose-file-v3/
+
+services:
+  opensearch:
+    image: opensearchproject/opensearch:1.2.4
+    container_name: fyp-opensearch
+
+    # adjust the environment variables based on the expected load of the database
+    # i.e. lots of nodes, need more memory
+    # Java heap capped at 512MB
+    # security is disabled for testing, if ports are exposed to public then anyone can login to database/dashboard with admin perms
+    # https://opensearch.org/docs/latest/opensearch/install/docker/
+    environment:
+      - cluster.name=opensearch-cluster
+      - node.name=opensearch-node
+      - bootstrap.memory_lock=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "DISABLE_INSTALL_DEMO_CONFIG=true"
+      - "DISABLE_SECURITY_PLUGIN=true"
+      - "discovery.type=single-node"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - fyp-opensearch:/usr/share/opensearch/data
+    ports:
+      - 9200:9200
+      - 9600:9600
+    networks:
+      - fyp-network
+
+  opendash:
+    image: opensearchproject/opensearch-dashboards:1.2.0
+    ports:
+      - 5601:5601
+    environment:
+      - 'OPENSEARCH_HOSTS=["http://opensearch:9200"]'
+      - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true"
+    networks:
+      - fyp-network
+    depends_on:
+      - opensearch
+
+volumes:
+  fyp-opensearch:
+
+networks:
+  fyp-network:
+    driver: bridge

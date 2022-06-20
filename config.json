@@ -1,0 +1,73 @@
+{
+	"default": {
+		"pcapPath": "/home/user1/Documents/fyp/pcaps",
+		"featurePath": "/home/user1/Documents/fyp/features",
+		"dataPath": "/home/user1/Documents/fyp/data-nodes",
+		"seed": 528491
+	},
+	"data": {
+		"datasets": [
+			["botiot_tcp",               1],
+			["cicddos2019_day2_NetBIOS", 1],
+			["ctu_23_web",               0],
+			["ctu_29_web",               0],
+			["ctu_71_doorlock",          0],
+			["botiot_udp",               1],
+			["cicddos2019_day2_NTP",     1],
+			["ctu_24_web",               0],
+			["ctu_30_web",               0],
+			["ctu_7_p2plinux",           0],
+			["cicddos2019_day1_LDAP",    1],
+			["ctu_12_p2plinux",          0],
+			["ctu_25_web",               0],
+			["ctu_31_web",               0],
+			["cicddos2019_day1_NetBIOS", 1],
+			["ctu_20_web",               0],
+			["ctu_26_web",               0],
+			["ctu_32_web",               0],
+			["cicddos2019_day2_DNS",     1],
+			["ctu_21_web",               0],
+			["ctu_27_web",               0],
+			["ctu_41_lights",            0],
+			["cicddos2019_day2_LDAP",    1],
+			["ctu_22_web",               0],
+			["ctu_28_web",               0],
+			["ctu_51_voiceassistant",    0],
+			["toniot_normal",            0],
+			["toniot_normal_iot",        0]
+		],
+		"inputSize": 13,
+		"splitTrain": 0.7,
+		"splitTest": 0.3,
+		"features": [
+			"dst2src_min_ps",
+			"dst2src_mean_ps",
+			"dst2src_max_ps",
+			"bidirectional_stddev_ps",
+			"bidirectional_fin_packets",
+			"src_port",
+			"dst_port",
+			"protocol",
+			"src2dst_mean_ps",
+			"src2dst_psh_packets",
+			"src2dst_duration_ms",
+			"bidirectional_syn_packets",
+			"bidirectional_rst_packets"
+		]
+	},
+	"model": {
+		"learnRate": 0.001,
+		"batchSize": 128
+	},
+	"federated": {
+		"fedWeight": {
+			"5": 9.5,
+			"0": 5.2
+		}
+	},
+	"longtail": {
+		"maxNodes": 19,
+		"lowerBound": 1,
+		"coefficient": 1.336
+	}
+}
